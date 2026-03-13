@@ -1,4 +1,4 @@
-# 🛡️ Projeto Cyquest: Simulador de Sequestro de Dados (CyLock)
+# Projeto Cyquest: Simulador de Sequestro de Dados (CyLock)
 
 ## ## Visão Geral
 O **Cyquest** é uma ferramenta de simulação de sequestro digital (Ransomware Ético) desenvolvida para a liga acadêmica **CyLock**. O objetivo é demonstrar o impacto de ataques de criptografia em sistemas desprotegidos e validar planos de recuperação de dados.
@@ -25,7 +25,7 @@ O **Cyquest** é uma ferramenta de simulação de sequestro digital (Ransomware 
 
 ---
 
-## ## 🚀 Passo a Passo para a Implementação
+## ## Passo a Passo para a Implementação
 
 ### ### Passo 1: Definição do Protocolo
 * Listar as extensões alvo (Ex: `.jpg, .png, .pdf, .docx, .mp4`).
