@@ -1,35 +1,105 @@
 import os
 from cryptography.hazmat.primitives.ciphers import Cipher, algorithms, modes
-from pathlib import Path
-from cryptography.fernet import Fernet
-import aes
+from cryptography.hazmat.primitives import padding
+from cryptography.hazmat.backends import default_backend
 
-# with é um protetor, meio que impede que os dados sejam comrropidos
-# with open('texto.txt','r') as arquivo:
-#   conteudo = arquivo.read();
-# print(conteudo);
-# caminho = Path('texto.cyquest');
-# caminho_novo = caminho.with_suffix('.cyquest');
-# caminho.rename(caminho_novo);
 
-# with caminho.open() as f:
-#   texto = f.read();
+# ==============================
+# 🔐 CRIPTOGRAFIA
+# ==============================
+def criptografar_arquivo(caminho_arquivo, chave_aes_256):
+    tamanho_chunk = 64 * 1024
+    caminho_saida = caminho_arquivo + ".cyquest"
 
-# print(texto);
+    iv = os.urandom(16)
 
-key = os.urandom(32);
-# print(f"chave gerada {key}");
-iv = os.urandom(16);
-# print(f"iv gerada {iv}");
+    cipher = Cipher(
+        algorithms.AES(chave_aes_256),
+        modes.CBC(iv),
+        backend=default_backend()
+    )
+    encryptor = cipher.encryptor()
+    padder = padding.PKCS7(128).padder()
 
-# usamos o algorithms.AES para definir que criptografia estamos utilizando, o modes.CBC significa o modo que meu algoritmo vai implementar a criptografia, CBC(Cipher Block Chaining) 
-cipher = Cipher(algorithms.AES(key), modes.CBC(iv));
-# encryptor "liga" a função para criptografar
-encryptor = cipher.encryptor();
+    try:
+        with open(caminho_arquivo, "rb") as arquivo_in, open(caminho_saida, "wb") as arquivo_out:
+            arquivo_out.write(iv)
 
-ct = encryptor.update(b"a secret message") + encryptor.finalize()
-print(f"criptografado {ct}");
-decryptor = cipher.decryptor();
-mensagem_limpa = decryptor.update(ct) + decryptor.finalize();
-b'a secret message'
-print(f"Descriptografado {mensagem_limpa}");
+            while True:
+                chunk = arquivo_in.read(tamanho_chunk)
+                if len(chunk) == 0:
+                    break
+
+                if len(chunk) < tamanho_chunk:
+                    chunk = padder.update(chunk) + padder.finalize()
+                    dados = encryptor.update(chunk) + encryptor.finalize()
+                    arquivo_out.write(dados)
+                    break
+                else:
+                    arquivo_out.write(encryptor.update(chunk))
+
+        print(f"[+] Arquivo criptografado: {caminho_saida}")
+
+        # 🗑️ Apaga o original após criptografar
+        os.remove(caminho_arquivo)
+        print(f"[!] Original apagado: {caminho_arquivo}")
+
+        return caminho_saida
+
+    except Exception as e:
+        print(f"[-] Erro ao criptografar {caminho_arquivo}: {e}")
+        # Se algo deu errado, remove o .cyquest incompleto para não deixar lixo
+        if os.path.exists(caminho_saida):
+            os.remove(caminho_saida)
+        return None
+
+
+# ==============================
+# 🔓 DESCRIPTOGRAFIA
+# ==============================
+def descriptografar_arquivo(caminho_arquivo_criptografado, chave_aes_256):
+    tamanho_chunk = 64 * 1024
+    caminho_saida = caminho_arquivo_criptografado.replace(".cyquest", "")
+
+    try:
+        with open(caminho_arquivo_criptografado, "rb") as arquivo_in:
+            iv = arquivo_in.read(16)
+
+            cipher = Cipher(
+                algorithms.AES(chave_aes_256),
+                modes.CBC(iv),
+                backend=default_backend()
+            )
+            decryptor = cipher.decryptor()
+            unpadder = padding.PKCS7(128).unpadder()
+
+            with open(caminho_saida, "wb") as arquivo_out:
+                while True:
+                    chunk = arquivo_in.read(tamanho_chunk)
+                    if len(chunk) == 0:
+                        break
+
+                    dados = decryptor.update(chunk)
+
+                    if len(chunk) < tamanho_chunk:
+                        dados += decryptor.finalize()
+                        dados = unpadder.update(dados) + unpadder.finalize()
+                        arquivo_out.write(dados)
+                        break
+                    else:
+                        arquivo_out.write(dados)
+
+        print(f"[+] Arquivo recuperado: {caminho_saida}")
+
+        # 🗑️ Apaga o .cyquest após restaurar o original
+        os.remove(caminho_arquivo_criptografado)
+        print(f"[!] Arquivo criptografado apagado: {caminho_arquivo_criptografado}")
+
+        return caminho_saida
+
+    except Exception as e:
+        print(f"[-] Erro ao descriptografar {caminho_arquivo_criptografado}: {e}")
+        # Se algo deu errado, remove o arquivo de saída incompleto
+        if os.path.exists(caminho_saida):
+            os.remove(caminho_saida)
+        return None
