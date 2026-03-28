@@ -1,3 +1,42 @@
+## Como Utilizar o CyQuest com Segurança
+
+### Pré-requisitos
+Antes de começar, crie a pasta que servirá como cofre para seus arquivos:
+```
+Documentos/laboratorio_teste
+```
+
+---
+
+### Criptografando seus arquivos
+
+1. Mova todos os arquivos que deseja proteger para a pasta `laboratorio_teste`
+2. Execute o **crypter_executavel.exe**
+3. Ao finalizar, uma chave de descriptografia chamada `chave_resgate.key` será gerada **na mesma pasta do executável**
+
+> ⚠️ **Guarde essa chave com segurança!** Sem ela, não será possível recuperar seus arquivos.
+
+---
+
+### Descriptografando seus arquivos
+
+1. Localize o arquivo `chave_resgate.key` gerado na etapa anterior
+2. Mova a chave para dentro da pasta `laboratorio_teste`
+3. Execute o **descripter_executavel.exe**
+4. Aguarde a conclusão — seus arquivos serão restaurados ao estado original
+
+---
+
+### Resumo rápido
+
+| Etapa | Ação |
+|---|---|
+| 1 | Coloque os arquivos em `Documentos/laboratorio_teste` |
+| 2 | Execute o crypter para criptografar |
+| 3 | Salve a `chave_resgate.key` gerada |
+| 4 | Mova a chave para `laboratorio_teste` |
+| 5 | Execute o descripter para recuperar |
+
 # Projeto Cyquest: Simulador de Sequestro de Dados (CyLock)
 
 ## ## Visão Geral
